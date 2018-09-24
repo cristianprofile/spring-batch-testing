@@ -1,18 +1,23 @@
 package test;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.test.AssertFile;
+import org.springframework.batch.test.JobLauncherTestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-//@ContextConfiguration(classes={BatchTestConfig.class, BatchConfiguration.class})
 public class BatchApplicationTests {
 
 
-/*	@Autowired
-	private JobLauncherTestUtils jobLauncherTestUtils;*/
+   @Autowired
+	private JobLauncherTestUtils jobLauncherTestUtils;
 
 
 
@@ -23,17 +28,14 @@ public class BatchApplicationTests {
 
 	@Test
 	public void contextLoads()  throws Exception{
-        System.out.println("Fake test ");
 //		JobExecution jobExecution = jobLauncherTestUtils.launchJob();
-//        JobExecution jobExecution = jobLauncherTestUtils.launchStep("step1");
-//		Assert.assertEquals("COMPLETED", jobExecution.getExitStatus().getExitCode());
-//
-//
-//       AssertFile.assertFileEquals(new FileSystemResource(EXPECTED_FILE),
-//                new FileSystemResource(OUTPUT_FILE));
-//
-//        AssertFile.assertFileEquals(new FileSystemResource(EXPECTED_FILE2),
-//                new FileSystemResource(OUTPUT_FILE2));
+        JobExecution jobExecution = jobLauncherTestUtils.launchStep("step1");
+		Assert.assertEquals("COMPLETED", jobExecution.getExitStatus().getExitCode());
+       AssertFile.assertFileEquals(new FileSystemResource(EXPECTED_FILE),
+                new FileSystemResource(OUTPUT_FILE));
+
+        AssertFile.assertFileEquals(new FileSystemResource(EXPECTED_FILE2),
+                new FileSystemResource(OUTPUT_FILE2));
 
 	}
 
