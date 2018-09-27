@@ -1,18 +1,37 @@
 package com.mymoid.batch.configuration;
 
+import io.github.benas.randombeans.EnhancedRandomBuilder;
+import io.github.benas.randombeans.api.EnhancedRandom;
 import org.springframework.batch.item.ItemProcessor;
 
-public class UserItemProcessor implements ItemProcessor<User, User> {
+import static java.nio.charset.Charset.forName;
+
+public class UserItemProcessor implements ItemProcessor<User, Transaction> {
+
+    private int cont=0;
 
     @Override
-    public User process(User user) throws Exception {
-        System.out.println("user = " + user);
-        Address address =new Address();
-        address.setId(110);
-        address.setName("namemio");
-        user.setAddress(address);
+    public Transaction process(User user) throws Exception {
+
+        EnhancedRandom random = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
+                .charset(forName("UTF-8"))
+                .stringLengthRange(5, 50)
+                .collectionSizeRange(1, 1)
+                .scanClasspathForConcreteTypes(true)
+                .overrideDefaultInitialization(false)
+                .build();
+        Transaction transaction = random.nextObject(Transaction.class);
 
 
-        return user;
+        System.out.println("transaction = " + transaction);
+
+        if (cont == 0) {
+            transaction.setFileName("pepe11.csv");
+        }
+        else {
+            transaction.setFileName("pepe22.csv");
+        }
+        cont++;
+        return transaction;
     }
 }

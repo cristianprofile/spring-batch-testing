@@ -1,5 +1,11 @@
-package com.mymoid.batch.configuration;
+package com.mymoid.batch;
 
+import com.mymoid.batch.configuration.DynamicItemWriter;
+import com.mymoid.batch.configuration.OrderWriter;
+import com.mymoid.batch.configuration.Transaction;
+import com.mymoid.batch.configuration.User;
+import com.mymoid.batch.configuration.UserItemProcessor;
+import com.mymoid.batch.configuration.UserRowMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -80,6 +86,22 @@ public class BatchConfiguration {
     }
 
 
+
+    @Bean
+    public DynamicItemWriter dynamicItemWriter(){
+        DynamicItemWriter writer = new DynamicItemWriter();
+        writer.setLineAggregator(new DelimitedLineAggregator<Transaction>() {{
+            setDelimiter(",");
+            setFieldExtractor(new BeanWrapperFieldExtractor<Transaction>() {{
+                setNames(new String[] { "address.id", "address.name" });
+            }});
+        }});
+
+        return writer;
+    }
+
+
+
     @Bean
     public FlatFileItemWriter<User> writer2(){
         FlatFileItemWriter<User> writer = new FlatFileItemWriter<User>();
@@ -105,8 +127,6 @@ public class BatchConfiguration {
     }
 
 
-
-
     @Bean
     public CompositeItemWriter compositeItemWritercomposite(){
         FlatFileItemWriter<User> writer = new FlatFileItemWriter<User>();
@@ -130,7 +150,8 @@ public class BatchConfiguration {
     }
 
 
-    @Bean OrderWriter orderWriter()
+    @Bean
+    OrderWriter orderWriter()
     {
        return new OrderWriter();
     }
@@ -143,10 +164,12 @@ public class BatchConfiguration {
 
     @Bean
     public Step step1() {
-        return stepBuilderFactory.get("step1").<User, User> chunk(2)
+
+        final UserItemProcessor processor = processor();
+        return stepBuilderFactory.get("step1").<User, Transaction> chunk(2)
                 .reader(reader())
-                .processor(processor())
-                .writer(compositeItemWritercomposite())
+                .processor(processor)
+                .writer(dynamicItemWriter())
                 .build();
     }
 

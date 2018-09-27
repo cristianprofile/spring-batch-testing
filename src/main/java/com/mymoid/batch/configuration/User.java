@@ -1,14 +1,13 @@
 package com.mymoid.batch.configuration;
 
-import com.mymoid.batch.configuration.Address;
-
 public class User {
     private Integer id;
 
     private String name;
 
-    private Address address;
+    private String fileName;
 
+    private Address address;
 
     public Integer getId() {
         return id;
@@ -26,6 +25,14 @@ public class User {
         this.name = name;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     public Address getAddress() {
         return address;
     }
@@ -38,6 +45,7 @@ public class User {
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
         sb.append("address=").append(address);
+        sb.append(", fileName='").append(fileName).append('\'');
         sb.append(", id=").append(id);
         sb.append(", name='").append(name).append('\'');
         sb.append('}');

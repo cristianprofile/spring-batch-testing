@@ -29,6 +29,7 @@ public class BatchApplicationTests {
 	@Test
 	public void contextLoads()  throws Exception{
 //		JobExecution jobExecution = jobLauncherTestUtils.launchJob();
+//        final JobExecution step1 = jobLauncherTestUtils.launchStep("step1");
         JobExecution jobExecution = jobLauncherTestUtils.launchStep("step1");
 		Assert.assertEquals("COMPLETED", jobExecution.getExitStatus().getExitCode());
        AssertFile.assertFileEquals(new FileSystemResource(EXPECTED_FILE),
@@ -37,7 +38,10 @@ public class BatchApplicationTests {
         AssertFile.assertFileEquals(new FileSystemResource(EXPECTED_FILE2),
                 new FileSystemResource(OUTPUT_FILE2));
 
-	}
+        Assert.assertEquals("COMPLETED", jobExecution.getExitStatus().getExitCode());
+
+
+    }
 
 
 }
