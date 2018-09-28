@@ -27,6 +27,11 @@ public class OrderWriter implements ItemStreamWriter<User> {
 
     private static final String FILE_NAME = "/tmp/MyFirstExcel4.xls";
 
+    private String fileDirectory;
+
+    public OrderWriter(String fileDirectory) {
+        this.fileDirectory = fileDirectory;
+    }
 
     @Override
     public void open(ExecutionContext executionContext) throws ItemStreamException {

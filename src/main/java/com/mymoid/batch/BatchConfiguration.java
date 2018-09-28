@@ -20,6 +20,7 @@ import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.support.CompositeItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -43,6 +44,9 @@ public class BatchConfiguration {
 
     @Autowired
     public DataSource dataSource;
+
+    @Value("${file.report.directory}")
+    private String fileDirectory;
 
     @Bean
     public JdbcCursorItemReader<User> reader(){
@@ -153,7 +157,7 @@ public class BatchConfiguration {
     @Bean
     OrderWriter orderWriter()
     {
-       return new OrderWriter();
+       return new OrderWriter(fileDirectory);
     }
 
 
