@@ -43,13 +43,12 @@ public class DynamicItemWriter  implements ItemStream, ItemWriter<Transaction> {
 
     @Override
     public void close() throws ItemStreamException {
-        for(FlatFileItemWriter f:writers.values()){
-            f.close();
-        }
+        writers.values().forEach(file-> file.close());
     }
 
     @Override
     public void write(List<? extends Transaction> items) throws Exception {
+
         for (Transaction item : items) {
             FlatFileItemWriter<Transaction> ffiw = getFlatFileItemWriter(item);
             ffiw.write(Arrays.asList(item));
