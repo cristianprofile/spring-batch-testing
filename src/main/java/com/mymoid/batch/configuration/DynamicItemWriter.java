@@ -25,6 +25,12 @@ public class DynamicItemWriter  implements ItemStream, ItemWriter<Transaction> {
 
     private ExecutionContext executionContext;
 
+    private String fileDirectory;
+
+    public DynamicItemWriter(String fileDirectory) {
+        this.fileDirectory = fileDirectory;
+    }
+
     @Override
     public void open(ExecutionContext executionContext) throws ItemStreamException {
         this.executionContext = executionContext;
@@ -61,7 +67,7 @@ public class DynamicItemWriter  implements ItemStream, ItemWriter<Transaction> {
             itemWriter = getTransactionFlatFileItemWriter(key);
 
             try {
-                UrlResource resource = new UrlResource("file:"+key);
+                UrlResource resource = new UrlResource("file:"+fileDirectory+"/"+key);
                 itemWriter.setResource(resource);
                 itemWriter.open(executionContext);
             } catch (MalformedURLException e) {

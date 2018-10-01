@@ -48,6 +48,17 @@ public class BatchConfiguration {
     @Value("${file.report.directory}")
     private String fileDirectory;
 
+    @Value("${file.report.server}")
+    private  String server;
+    @Value("${file.report.port}")
+    private  int port;
+    @Value("${file.report.user}")
+    private  String user;
+    @Value("${file.report.password}")
+    private  String password;
+
+
+
     @Bean
     public JdbcCursorItemReader<User> reader(){
         JdbcCursorItemReader<User> reader = new JdbcCursorItemReader<User>();
@@ -93,7 +104,7 @@ public class BatchConfiguration {
 
     @Bean
     public DynamicItemWriter dynamicItemWriter(){
-        DynamicItemWriter writer = new DynamicItemWriter();
+        DynamicItemWriter writer = new DynamicItemWriter(fileDirectory);
         writer.setLineAggregator(new DelimitedLineAggregator<Transaction>() {{
             setDelimiter(",");
             setFieldExtractor(new BeanWrapperFieldExtractor<Transaction>() {{
@@ -163,9 +174,6 @@ public class BatchConfiguration {
 
 
 
-
-
-
     @Bean
     public Step step1() {
 
@@ -185,5 +193,16 @@ public class BatchConfiguration {
                 .end()
                 .build();
     }
+
+
+
+    @Bean
+    public FtpClient FtpClient()
+    {
+        return new FtpClient(server, port, user, password);
+    }
+
+
+
 
 }
