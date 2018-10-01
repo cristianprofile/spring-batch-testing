@@ -11,6 +11,7 @@ import org.mockftpserver.fake.filesystem.FileEntry;
 import org.mockftpserver.fake.filesystem.FileSystem;
 import org.mockftpserver.fake.filesystem.UnixFakeFileSystem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -26,6 +27,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class FtpClientIntegrationTest {
 
+
+    @Value("${file.report.user}")
+    private String user;
+
+    @Value("${file.report.password}")
+    private String password;
+
+    @Value("${file.report.server}")
+    private String server;
+
+
+    @Value("${file.report.port}")
+    private String port;
+
+
     private FakeFtpServer fakeFtpServer;
 
     @Autowired
@@ -34,7 +50,7 @@ public class FtpClientIntegrationTest {
     @Before
     public void setup() throws IOException {
         fakeFtpServer = new FakeFtpServer();
-        fakeFtpServer.addUserAccount(new UserAccount("user", "password", "/data"));
+        fakeFtpServer.addUserAccount(new UserAccount(user, password, "/data"));
 
         FileSystem fileSystem = new UnixFakeFileSystem();
         fileSystem.add(new DirectoryEntry("/data"));
